@@ -119,7 +119,7 @@ app.get("/api/verifyemail", function(req, res)
     })
 })
     
-const PORT = process.env.PORT || 3001;
+const PORT = 3001;
 app.listen(PORT, function(){
     console.log(`API is running on port ${ PORT }`);
 });
