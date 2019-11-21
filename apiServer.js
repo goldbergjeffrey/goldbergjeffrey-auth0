@@ -46,6 +46,8 @@ app.get("/api/private", authCheck, function(req,res)
     res.json({message:"Hello from the private endpoint. You are seeing this because you are authenticated!"});
 });
 
+
+
 app.get("/api/getuser", function(req,res)
 {
 
