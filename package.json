@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "npm-run-all --parallel appServer apiServer",
-    "appServer": "node appserver.js",
-    "apiServer": "node apiserver.js",
+    "appServer": "node appServer.js",
+    "apiServer": "node apiServer.js",
     "test": "npm-check"
   },
   "author": "Jeffrey P Goldberg",
