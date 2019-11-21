@@ -12,7 +12,6 @@ const AUTH0_DOMAIN='randomqliks.auth0.com';
 const AUTH0_CALLBACK_URL='https://goldbergjeffrey-pizza42.herokuapp.com/callback';
 const AUTH0_AUDIENCE = "https://goldbergjeffrey-pizza42";
 
-
 const app = express();
 app.use(cors());
 app.use(bodyParser.json())
@@ -108,6 +107,7 @@ app.get("/api/getpeopledata", function(req,res)
     })
 })
 
+
 app.get("/api/verifyemail", function(req, res)
 {
     var result = {};
@@ -126,11 +126,9 @@ app.get("/api/verifyemail", function(req, res)
     })
 })
 
-const hostname = '0.0.0.0';
-const PORT = process.env.PORT || 3000;
-const server = app.listen(PORT, hostname, () => {
-    console.log(`API is running on port ${ PORT }`);
-  });
+
+app.listen(process.env.SERVERPORT);
+console.log("listening on https://goldbergjeffrey-pizza42.herokuapp.com:"+ process.env.SERVERPORT);
 
 function getUserInfo(token, user)
 {
