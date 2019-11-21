@@ -14,7 +14,7 @@
     var idToken;
     var expiresAt;
     var userProfile;
-    var heroku = 'https://goldbergjeffrey-pizza42.herokuapp.com:4500/';
+    var heroku = 'http://localhost:3001/';
 
     function getIdToken() {
       return idToken;
