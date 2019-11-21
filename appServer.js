@@ -10,7 +10,7 @@ app.get('/*', function(req, res) {
 
 const hostname = '0.0.0.0';
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.APPPORT || 3000;
 
 const server = app.listen(PORT, hostname, () => {
   console.log(`APP is running on port ${ PORT }`);

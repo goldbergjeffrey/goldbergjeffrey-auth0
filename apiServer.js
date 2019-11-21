@@ -124,7 +124,7 @@ app.get("/api/verifyemail", function(req, res)
 })
 
 
-app.listen(3001);
+app.listen(PROCESS.env.APIPORT);
 console.log("listening on https://localhost:3001" );
 
 function getUserInfo(token, user)
