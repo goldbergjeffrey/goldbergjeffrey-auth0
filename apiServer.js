@@ -62,9 +62,15 @@ app.get("/api/getpeopledata", function(req,res)
     var gToken = req.header('gAccess_token');
     var userId = req.header('UserId');
 
-    return getGooglePeopleGender(gToken)
+    return getGooglePeopleData(gToken)
     .then(function(peopleData)
     {
+        console.log(peopleData)
+        result.picture = JSON.parse(peopleData).photos.filter(function(photo)
+        {
+            return photo.metadata.source.type.toUpperCase() == "PROFILE";
+        })
+    
         result.gender = JSON.parse(peopleData).genders[0].value;
         return getGooglePeopleContactCount(gToken)
         .then(function(peopleCount)
@@ -75,6 +81,7 @@ app.get("/api/getpeopledata", function(req,res)
         {
             //add this information to the user profile
             var user_metadata = {
+                "picture": result.picture[0].url,
                 "user_metadata": {
                     "gender": result.gender,
                     "contactCount": result.contactCount
@@ -91,6 +98,24 @@ app.get("/api/getpeopledata", function(req,res)
             })
         })
 
+    })
+})
+
+app.get("/api/verifyemail", function(req, res)
+{
+    var result = {};
+    var userId = req.header('UserId');
+    var user_metadata = {
+        "email_verified": true
+    };
+    return getAPIToken()
+    .then(function(token)
+    {
+        return patchUserInfo(token,encodeURI(userId),user_metadata)
+        .then(function(finish)
+        {
+            res.json(result);
+        })
     })
 })
     
@@ -153,11 +178,11 @@ function getAPIToken()
     })});
 }
 
-function getGooglePeopleGender(identity)
+function getGooglePeopleData(identity)
 {
     var options = {
         method: 'GET',
-        url: 'https://people.googleapis.com/v1/people/me?personFields=genders',
+        url: 'https://people.googleapis.com/v1/people/me?personFields=genders,photos',
         headers: {
             Authorization: 'Bearer ' + identity
         }

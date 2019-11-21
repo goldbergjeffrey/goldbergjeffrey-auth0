@@ -125,11 +125,16 @@
       })
       .then(function(extProfile)
       {
-        getGoogleData(extProfile);
+        var profileArray = parseProfile(JSON.parse(extProfile).identities,'google-oauth2')
+        if(Array.isArray(profileArray) && profileArray.length)
+        {
+          getGoogleData(extProfile);
+        }
+
       })
       .catch(function(error)
       {
-        alert('Error: ' + error.error + '. Check the console for further details.');
+        alert('Error: ' + JSON.stringify(error) + '. Check the console for further details.');
       });
     }
 
@@ -143,10 +148,10 @@
         }
       }).then(function(response)
       {
-        alert("google gender(" + response.data.gender + ") and contact count(" + response.data.contactCount + ") acquired.")
+        //alert("google gender(" + response.data.gender + ") and contact count(" + response.data.contactCount + ") acquired.")
       }).catch(function(error)
       {
-        alert('Error: ' + error.error + '. Check the console for further details.');
+        alert('Error: ' + JSON.stringify(error) + '. Check the console for further details.');
       });
     }
 
