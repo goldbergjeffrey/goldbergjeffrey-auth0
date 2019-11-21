@@ -16,6 +16,7 @@
     vm.fullProfile;
     vm.email_verified = false;
     vm.order_click=false;
+  
 
     if(vm.auth.isAuthenticated())
     {
@@ -56,7 +57,7 @@
     }
 
     vm.verifyEmail = function() {
-      $http.get("http://localhost:3001/api/verifyemail",
+      $http.get(heroku +"api/verifyemail",
       {
         headers: {
           UserId: vm.profile.sub
@@ -69,14 +70,14 @@
     }
 
     vm.getPublicMessage = function() {
-      $http.get("http://localhost:3001/api/public").then(function(response)
+      $http.get(heroku +"api/public").then(function(response)
       {
         vm.message = response.data.message;
       });
     }
 
     vm.getPrivateMessage = function() {
-      $http.get("http://localhost:3001/api/private", 
+      $http.get(heroku +"api/private", 
       {
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('access_token')
@@ -92,7 +93,7 @@
 
     function getFullUserProfile() {
       var foo = vm.profile;
-      $http.get("http://localhost:3001/api/getuser",
+      $http.get(heroku +"api/getuser",
       {
         headers: {
           UserId: foo.sub

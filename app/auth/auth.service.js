@@ -14,6 +14,7 @@
     var idToken;
     var expiresAt;
     var userProfile;
+    var heroku = 'https://goldbergjeffrey-pizza42.herokuapp.com/';
 
     function getIdToken() {
       return idToken;
@@ -114,7 +115,7 @@
     }
 
     function getGoogleProfile() {
-      $http.get("http://localhost:3001/api/getuser",
+      $http.get(heroku + "api/getuser",
       {
         headers: {
           UserId: userProfile.sub
@@ -140,7 +141,7 @@
 
     function getGoogleData(extendedProfile) {
       var identity = parseProfile(JSON.parse(extendedProfile).identities,'google-oauth2');
-      $http.get("http://localhost:3001/api/getpeopledata",
+      $http.get(heroku + "api/getpeopledata",
       {
         headers: {
           gAccess_token: identity[0].access_token,
@@ -173,7 +174,8 @@
       isAuthenticated: isAuthenticated,
       renewTokens: renewTokens,
       getProfile: getProfile,
-      getCachedProfile: getCachedProfile
+      getCachedProfile: getCachedProfile,
+      heroku:heroku
     }
   }
 })();
