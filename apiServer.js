@@ -5,6 +5,7 @@ const jwks = require("jwks-rsa");
 const cors = require("cors");
 const request = require("request");
 const bodyParser = require("body-parser");
+const path = require('path');
 
 const AUTH0_CLIENT_ID='jpremUKrjbLQzEb87zhFgcWJifs0CaeM'; 
 const AUTH0_DOMAIN='randomqliks.auth0.com'; 
@@ -29,6 +30,12 @@ const authCheck = jwt({
 });
 
 const checkScopes = jwtAuthz([ 'read:messages' ]);
+
+app.use('/', express.static(__dirname +  '/'));
+
+app.get('/*', function(req, res) {
+  res.sendFile(path.join(__dirname + '/index.html'));
+});
 
 app.get("/api/public", function(req,res)
 {
@@ -118,11 +125,12 @@ app.get("/api/verifyemail", function(req, res)
         })
     })
 })
-    
-const PORT = 3001;
-app.listen(PORT, function(){
+
+const hostname = '0.0.0.0';
+const PORT = process.env.PORT || 3000;
+const server = app.listen(PORT, hostname, () => {
     console.log(`API is running on port ${ PORT }`);
-});
+  });
 
 function getUserInfo(token, user)
 {
