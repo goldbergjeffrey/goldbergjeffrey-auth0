@@ -1,0 +1,27 @@
+<h4 ng-if="vm.auth.isAuthenticated()">
+    You are logged in!
+</h4>
+<h4 ng-if="!vm.auth.isAuthenticated()">
+  You are not logged in! Please <a ng-click="vm.auth.login()">Log In</a> to continue.
+</h4>
+<!--<div ng-if="vm.auth.isAuthenticated()">
+  <div class="panel panel-default profile-area">
+    <div class="panel-heading"><h3>Profile</h3></div>
+    <div class="panel-body">
+      <img ng-src="{{ vm.profile.picture }}" class="avatar" alt="avatar">
+      <div>
+        <label><i class="glyphicon glyphicon-user"></i> Nickname</label>
+        <h3 class="nickname">{{ vm.profile.nickname }}</h3>
+      </div>
+      <pre class="full-profile">{{ vm.profile | json }}</pre>
+    </div>
+  </div>
+</div> -->
+<div class="text-center">
+    <a ng-click="vm.getPublicMessage()">Get Message</a> <span style="padding: 0 50px;">|</span>
+    <a ng-click="vm.getPrivateMessage()">Get Secret Message</a> <span style="padding: 0 50px;">|</span>
+    <a ng-click="vm.getGoogleProfile()">Get GoogleProfile</a> <span style="padding: 0 50px;">|</span>
+    <a ng-click="vm.getGoogleData()">Get Google Gender</a>
+    <br />
+    <p>{{vm.message}}</p>
+  </div>

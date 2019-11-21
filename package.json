@@ -1,0 +1,32 @@
+{
+  "name": "goldbergjeffrey-auth0-audition",
+  "version": "1.0.0",
+  "description": "SPA handling connectivity to Auth0 API and acquiring profile details from 3rd party services.",
+  "main": "server.js",
+  "scripts": {
+    "start": "npm-run-all --parallel appServer apiServer",
+    "appServer": "node appserver.js",
+    "apiServer": "node apiserver.js",
+    "test": "npm-check"
+  },
+  "author": "Jeffrey P Goldberg",
+  "license": "MIT",
+  "dependencies": {
+    "@uirouter/angularjs": "^1.0.23",
+    "angular": "^1.7.8",
+    "angular-auth0": "^3.0.4",
+    "auth0-js": "^9.11.3",
+    "body-parser": "^1.19.0",
+    "bootstrap": "^4.3.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-jwt": "^5.3.1",
+    "express-jwt-authz": "^2.3.1",
+    "jwks-rsa": "^1.6.0",
+    "path": "^0.12.7",
+    "request": "^2.88.0"
+  },
+  "devDependencies": {
+    "npm-check": "^5.9.0"
+  }
+}
