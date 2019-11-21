@@ -14,7 +14,7 @@
     var idToken;
     var expiresAt;
     var userProfile;
-    var heroku = 'http://localhost:3001/';
+    var heroku = 'https://pizza42-api.herokuapp.com/';
 
     function getIdToken() {
       return idToken;
