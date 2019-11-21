@@ -4,7 +4,7 @@
   "description": "SPA handling connectivity to Auth0 API and acquiring profile details from 3rd party services.",
   "main": "server.js",
   "scripts": {
-    "start": "apiServer",
+    "start": "node apiServer.js",
     "appServer": "node appServer.js",
     "apiServer": "node apiServer.js",
     "test": "npm-check"
