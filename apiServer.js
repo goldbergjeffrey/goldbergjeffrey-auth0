@@ -120,7 +120,9 @@ app.get("/api/verifyemail", function(req, res)
 })
     
 
-app.listen(3001);
+app.listen(process.env.PORT || 3001, function(){
+    console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+  });
 console.log("listening on https://goldbergjeffrey-pizza42.herokuapp.com:3001");
 
 function getUserInfo(token, user)

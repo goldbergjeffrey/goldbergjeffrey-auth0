@@ -11,6 +11,10 @@ app.get('/*', function(req, res) {
 const hostname = 'goldbergjeffrey-pizza42.herokuapp.com';
 const port = 3000;
 
-const server = app.listen(port, hostname, () => {
-  console.log(`Server running at https://${hostname}:${port}/`);  
+app.listen(process.env.PORT || 3000, function(){
+  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+});
+
+const server = app.listen(process.env.PORT || 3000, hostname, () => {
+  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env); 
 });
