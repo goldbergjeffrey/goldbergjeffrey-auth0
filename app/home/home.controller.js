@@ -21,11 +21,15 @@
     } else {
       authService.getProfile(function(err, profile) {
         vm.profile = profile;
-
+        getFullUserProfile();
         //$scope.$apply();
       });
     }
 
+    vm.orderPizza = function()
+    {
+      alert("let's order some pizza!");
+    }
 
     vm.getPublicMessage = function() {
       $http.get("http://localhost:3001/api/public").then(function(response)
@@ -45,11 +49,11 @@
         vm.message = response.data.message;
       }).catch(function(error)
       {
-        vm.message = "You are very stupid man";
+        vm.message = "Something very wrong has happened: " + error;
       });
     }
 
-    vm.getGoogleProfile = function() {
+    function getFullUserProfile() {
       var foo = vm.profile;
       $http.get("http://localhost:3001/api/getuser",
       {
@@ -66,32 +70,33 @@
       });
     }
 
-    vm.getGoogleData = function(){
-      var identity = parseProfile(JSON.parse(vm.fullProfile).identities,'google-oauth2');
-      $http.get("http://localhost:3001/api/getpeopledata",
-      {
-        headers: {
-          gAccess_token: identity[0].access_token
-        }
-      }).then(function(response)
-      {
-        vm.message = response.data.message
-      }).catch(function(error)
-      {
+    // vm.getGoogleData = function(){
+    //   var identity = parseProfile(JSON.parse(vm.fullProfile).identities,'google-oauth2');
+    //   $http.get("http://localhost:3001/api/getpeopledata",
+    //   {
+    //     headers: {
+    //       gAccess_token: identity[0].access_token,
+    //       UserId: vm.profile.sub
+    //     }
+    //   }).then(function(response)
+    //   {
+    //     vm.message = response.data.message
+    //   }).catch(function(error)
+    //   {
 
-        vm.message=error;
-      });
-    }
+    //     vm.message=error;
+    //   });
+    // }
 
   }
 
-  function parseProfile(data, providerName)
-  {
-    let identity = data.filter(function(item)
-    {
-      return item.provider ===providerName;
-    })
-    return identity;
-  }
+  // function parseProfile(data, providerName)
+  // {
+  //   let identity = data.filter(function(item)
+  //   {
+  //     return item.provider ===providerName;
+  //   })
+  //   return identity;
+  // }
 
 })();

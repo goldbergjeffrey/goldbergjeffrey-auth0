@@ -11,7 +11,6 @@ const AUTH0_DOMAIN='randomqliks.auth0.com';
 const AUTH0_CALLBACK_URL='http://localhost:3000/callback';
 const AUTH0_AUDIENCE = "https://goldbergjeffrey-pizza42";
 
-console.log(`https://${AUTH0_DOMAIN}/.well-known/jwks.json`);
 
 const app = express();
 app.use(cors());
@@ -38,24 +37,20 @@ app.get("/api/public", function(req,res)
 
 app.get("/api/private", authCheck, function(req,res)
 {
-    console.log("in the private api call")
     res.json({message:"Hello from the private endpoint. You are seeing this because you are authenticated!"});
 });
 
 app.get("/api/getuser", function(req,res)
 {
-    console.log("in the getuser");
 
     var user = req.header("UserId");
 
     return getAPIToken()
     .then(function(token)
     {
-//        console.log(token);
         return getUserInfo(token,encodeURI(user))
         .then(function(body)
         {
-//            console.log(body);
             res.json({message: body});
         })
     })
@@ -63,23 +58,37 @@ app.get("/api/getuser", function(req,res)
 
 app.get("/api/getpeopledata", function(req,res)
 {
-    var result;
-    console.log("getGooglePeopleData");
+    var result = {};
     var gToken = req.header('gAccess_token');
-    console.log(gToken);
+    var userId = req.header('UserId');
+
     return getGooglePeopleGender(gToken)
     .then(function(peopleData)
     {
-        console.log(peopleData);
-//        result.peopleData = peopleData
+        result.gender = JSON.parse(peopleData).genders[0].value;
         return getGooglePeopleContactCount(gToken)
         .then(function(peopleCount)
         {
-            
-            console.log(JSON.parse(peopleCount).totalPeople);
-            console.log(typeof(peopleCount));
-//            result.contactCount = peopleCount.totalPeople;
-            res.json({message: "yippee!"});
+            result.contactCount = JSON.parse(peopleCount).totalPeople;
+            return;
+        }).then(function()
+        {
+            //add this information to the user profile
+            var user_metadata = {
+                "user_metadata": {
+                    "gender": result.gender,
+                    "contactCount": result.contactCount
+                }
+            };
+            return getAPIToken()
+            .then(function(token)
+            {
+                return patchUserInfo(token,encodeURI(userId),user_metadata)
+                .then(function(finish)
+                {
+                    res.json(result);
+                })
+            })
         })
 
     })
@@ -107,6 +116,28 @@ function getUserInfo(token, user)
     })});
 }
 
+function patchUserInfo(token, user, JSONInfo)
+{
+    var options = {
+        method: 'PATCH',
+        url: `https://${AUTH0_DOMAIN}/api/v2/users/${user}`,
+        headers: {
+            'content-type':'application/json',
+            authorization: 'Bearer ' + token
+        },
+        body: JSON.stringify(JSONInfo)
+    }
+
+    return new Promise(resolve => {
+        request(options,function(error,response,body)
+        {
+            if(error) throw new Error(error);
+
+            resolve(`${response.statusCode}: ${response}`);
+        })
+    })
+}
+
 function getAPIToken()
 {
     var options = { method: 'POST',
@@ -118,7 +149,6 @@ function getAPIToken()
         request(options, function (error, response, body) {
             if (error) throw new Error(error);
             let access_token = JSON.parse(body).access_token;
-            //console.log(access_token);
             resolve(access_token);
     })});
 }

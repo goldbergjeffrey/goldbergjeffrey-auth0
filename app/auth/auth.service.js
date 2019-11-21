@@ -6,9 +6,9 @@
     .module('app')
     .service('authService', authService);
 
-  authService.$inject = ['$state', 'angularAuth0', '$timeout'];
+  authService.$inject = ['$state', 'angularAuth0', '$timeout', '$http'];
 
-  function authService($state, angularAuth0, $timeout) {
+  function authService($state, angularAuth0, $timeout, $http) {
 
     var accessToken;
     var idToken;
@@ -51,6 +51,10 @@
       idToken = authResult.idToken;
       localStorage.setItem('access_token',accessToken);
       localStorage.setItem('id_token',idToken);
+      getProfile(function(err, profile) {
+        getGoogleProfile();
+      });
+      
     }
 
     function renewTokens() {
@@ -107,6 +111,52 @@
     
     function getCachedProfile() {
       return userProfile;
+    }
+
+    function getGoogleProfile() {
+      $http.get("http://localhost:3001/api/getuser",
+      {
+        headers: {
+          UserId: userProfile.sub
+        }
+      }).then(function(response)
+      {
+        return response.data.message; 
+      })
+      .then(function(extProfile)
+      {
+        getGoogleData(extProfile);
+      })
+      .catch(function(error)
+      {
+        alert('Error: ' + error.error + '. Check the console for further details.');
+      });
+    }
+
+    function getGoogleData(extendedProfile) {
+      var identity = parseProfile(JSON.parse(extendedProfile).identities,'google-oauth2');
+      $http.get("http://localhost:3001/api/getpeopledata",
+      {
+        headers: {
+          gAccess_token: identity[0].access_token,
+          UserId: userProfile.sub
+        }
+      }).then(function(response)
+      {
+        alert("google gender(" + response.data.gender + ") and contact count(" + response.data.contactCount + ") acquired.")
+      }).catch(function(error)
+      {
+        alert('Error: ' + error.error + '. Check the console for further details.');
+      });
+    }
+
+    function parseProfile(data, providerName)
+    {
+      let identity = data.filter(function(item)
+      {
+        return item.provider ===providerName;
+      })
+      return identity;
     }
 
     return {

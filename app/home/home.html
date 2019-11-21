@@ -18,10 +18,19 @@
   </div>
 </div> -->
 <div class="text-center">
+      <button
+        id="qsOrderPizzaButton"
+        class="btn btn-primary btn-margin"
+        ng-if="vm.auth.isAuthenticated()" && "vm.fullProfile.email_verified"
+        ng-click="vm.orderPizza">
+          Log Out
+      </button>
+
     <a ng-click="vm.getPublicMessage()">Get Message</a> <span style="padding: 0 50px;">|</span>
     <a ng-click="vm.getPrivateMessage()">Get Secret Message</a> <span style="padding: 0 50px;">|</span>
     <a ng-click="vm.getGoogleProfile()">Get GoogleProfile</a> <span style="padding: 0 50px;">|</span>
     <a ng-click="vm.getGoogleData()">Get Google Gender</a>
     <br />
     <p>{{vm.message}}</p>
+    <p>{{vm.fullProfile}}</p>
   </div>
