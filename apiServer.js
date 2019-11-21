@@ -8,9 +8,8 @@ const bodyParser = require("body-parser");
 
 const AUTH0_CLIENT_ID='jpremUKrjbLQzEb87zhFgcWJifs0CaeM'; 
 const AUTH0_DOMAIN='randomqliks.auth0.com'; 
-const AUTH0_CALLBACK_URL='http://localhost:3000/callback';
+const AUTH0_CALLBACK_URL='https://goldbergjeffrey-pizza42.herokuapp.com/callback';
 const AUTH0_AUDIENCE = "https://goldbergjeffrey-pizza42";
-
 
 const app = express();
 app.use(cors());
@@ -95,8 +94,8 @@ app.get("/api/getpeopledata", function(req,res)
 })
     
 
-app.listen(3001);
-console.log("listening on http://localhost:3001");
+app.listen(process.env.SERVERPORT);
+console.log("listening on https://goldbergjeffrey-pizza42.herokuapp.com:"+ process.env.SERVERPORT);
 
 function getUserInfo(token, user)
 {
