@@ -4,9 +4,9 @@
   "description": "SPA handling connectivity to Auth0 API and acquiring profile details from 3rd party services.",
   "main": "server.js",
   "scripts": {
-    "start": "npm-run-all --parallel appServer apiServer",
-    "appServer": "node appserver.js",
-    "apiServer": "node apiserver.js",
+    "start": "node apiServer.js",
+    "appServer": "node appServer.js",
+    "apiServer": "node apiServer.js",
     "test": "npm-check"
   },
   "author": "Jeffrey P Goldberg",
@@ -23,6 +23,7 @@
     "express-jwt": "^5.3.1",
     "express-jwt-authz": "^2.3.1",
     "jwks-rsa": "^1.6.0",
+    "npm-run-all": "^4.1.5",
     "path": "^0.12.7",
     "request": "^2.88.0"
   },

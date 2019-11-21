@@ -5,6 +5,7 @@ const jwks = require("jwks-rsa");
 const cors = require("cors");
 const request = require("request");
 const bodyParser = require("body-parser");
+const path = require('path');
 
 const AUTH0_CLIENT_ID='jpremUKrjbLQzEb87zhFgcWJifs0CaeM'; 
 const AUTH0_DOMAIN='randomqliks.auth0.com'; 
@@ -28,6 +29,12 @@ const authCheck = jwt({
 });
 
 const checkScopes = jwtAuthz([ 'read:messages' ]);
+
+app.use('/', express.static(__dirname +  '/'));
+
+app.get('/*', function(req, res) {
+  res.sendFile(path.join(__dirname + '/index.html'));
+});
 
 app.get("/api/public", function(req,res)
 {
@@ -61,9 +68,15 @@ app.get("/api/getpeopledata", function(req,res)
     var gToken = req.header('gAccess_token');
     var userId = req.header('UserId');
 
-    return getGooglePeopleGender(gToken)
+    return getGooglePeopleData(gToken)
     .then(function(peopleData)
     {
+        console.log(peopleData)
+        result.picture = JSON.parse(peopleData).photos.filter(function(photo)
+        {
+            return photo.metadata.source.type.toUpperCase() == "PROFILE";
+        })
+    
         result.gender = JSON.parse(peopleData).genders[0].value;
         return getGooglePeopleContactCount(gToken)
         .then(function(peopleCount)
@@ -74,6 +87,7 @@ app.get("/api/getpeopledata", function(req,res)
         {
             //add this information to the user profile
             var user_metadata = {
+                "picture": result.picture[0].url,
                 "user_metadata": {
                     "gender": result.gender,
                     "contactCount": result.contactCount
@@ -92,7 +106,26 @@ app.get("/api/getpeopledata", function(req,res)
 
     })
 })
-    
+
+
+app.get("/api/verifyemail", function(req, res)
+{
+    var result = {};
+    var userId = req.header('UserId');
+    var user_metadata = {
+        "email_verified": true
+    };
+    return getAPIToken()
+    .then(function(token)
+    {
+        return patchUserInfo(token,encodeURI(userId),user_metadata)
+        .then(function(finish)
+        {
+            res.json(result);
+        })
+    })
+})
+
 
 app.listen(process.env.SERVERPORT);
 console.log("listening on https://goldbergjeffrey-pizza42.herokuapp.com:"+ process.env.SERVERPORT);
@@ -152,11 +185,11 @@ function getAPIToken()
     })});
 }
 
-function getGooglePeopleGender(identity)
+function getGooglePeopleData(identity)
 {
     var options = {
         method: 'GET',
-        url: 'https://people.googleapis.com/v1/people/me?personFields=genders',
+        url: 'https://people.googleapis.com/v1/people/me?personFields=genders,photos',
         headers: {
             Authorization: 'Bearer ' + identity
         }

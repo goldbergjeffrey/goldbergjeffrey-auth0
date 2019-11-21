@@ -19,18 +19,41 @@
 </div> -->
 <div class="text-center">
       <button
+        id="qsLogMeIn"
+        class="btn btn-primary btn-margin"
+        ng-click="vm.auth.login()">
+          1. Log In
+      </button>
+      <span style="padding-right:10px"></span>
+      <button
+        id="qsShowLinkedAccount"
+        class="btn btn-primary btn-margin"
+        ng-click="vm.auth.login()">
+          2. Show Linked Account
+      </button>
+      <span style="padding-right:10px"></span>
+      <button
+        id="qsShowUserProfile"
+        class="btn btn-primary btn-margin"
+        ng-click="vm.getFullUserProfile()">
+          3,5,6. Show Auth0 User Profile
+      </button>
+      <span style="padding-right:10px"></span>
+      <button
         id="qsOrderPizzaButton"
         class="btn btn-primary btn-margin"
-        ng-if="vm.auth.isAuthenticated()" && "vm.fullProfile.email_verified"
-        ng-click="vm.orderPizza">
-          Log Out
+        ng-click="vm.orderPizza()">
+          4. Order a pizza
       </button>
-
-    <a ng-click="vm.getPublicMessage()">Get Message</a> <span style="padding: 0 50px;">|</span>
-    <a ng-click="vm.getPrivateMessage()">Get Secret Message</a> <span style="padding: 0 50px;">|</span>
-    <a ng-click="vm.getGoogleProfile()">Get GoogleProfile</a> <span style="padding: 0 50px;">|</span>
-    <a ng-click="vm.getGoogleData()">Get Google Gender</a>
+    
     <br />
     <p>{{vm.message}}</p>
-    <p>{{vm.fullProfile}}</p>
+    <button
+        id="qsVerifyEmail"
+        class="btn btn-primary btn-margin"
+        ng-if='!vm.email_verified && vm.order_click'
+        ng-click="vm.verifyEmail()">
+          4a. Verify email
+      </button>
+    <!--<p>{{vm.fullProfile}}</p> -->
   </div>

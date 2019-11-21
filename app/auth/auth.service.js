@@ -14,6 +14,7 @@
     var idToken;
     var expiresAt;
     var userProfile;
+    var heroku = 'https://goldbergjeffrey-pizza42.herokuapp.com/';
 
     function getIdToken() {
       return idToken;
@@ -114,7 +115,7 @@
     }
 
     function getGoogleProfile() {
-      $http.get("http://localhost:3001/api/getuser",
+      $http.get(heroku + "api/getuser",
       {
         headers: {
           UserId: userProfile.sub
@@ -125,17 +126,22 @@
       })
       .then(function(extProfile)
       {
-        getGoogleData(extProfile);
+        var profileArray = parseProfile(JSON.parse(extProfile).identities,'google-oauth2')
+        if(Array.isArray(profileArray) && profileArray.length)
+        {
+          getGoogleData(extProfile);
+        }
+
       })
       .catch(function(error)
       {
-        alert('Error: ' + error.error + '. Check the console for further details.');
+        alert('Error: ' + JSON.stringify(error) + '. Check the console for further details.');
       });
     }
 
     function getGoogleData(extendedProfile) {
       var identity = parseProfile(JSON.parse(extendedProfile).identities,'google-oauth2');
-      $http.get("http://localhost:3001/api/getpeopledata",
+      $http.get(heroku + "api/getpeopledata",
       {
         headers: {
           gAccess_token: identity[0].access_token,
@@ -143,10 +149,10 @@
         }
       }).then(function(response)
       {
-        alert("google gender(" + response.data.gender + ") and contact count(" + response.data.contactCount + ") acquired.")
+        //alert("google gender(" + response.data.gender + ") and contact count(" + response.data.contactCount + ") acquired.")
       }).catch(function(error)
       {
-        alert('Error: ' + error.error + '. Check the console for further details.');
+        alert('Error: ' + JSON.stringify(error) + '. Check the console for further details.');
       });
     }
 
@@ -168,7 +174,8 @@
       isAuthenticated: isAuthenticated,
       renewTokens: renewTokens,
       getProfile: getProfile,
-      getCachedProfile: getCachedProfile
+      getCachedProfile: getCachedProfile,
+      heroku:heroku
     }
   }
 })();
