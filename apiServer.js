@@ -30,12 +30,6 @@ const authCheck = jwt({
 
 const checkScopes = jwtAuthz([ 'read:messages' ]);
 
-app.use('/', express.static(__dirname +  '/'));
-
-app.get('/*', function(req, res) {
-  res.sendFile(path.join(__dirname + '/index.html'));
-});
-
 app.get("/api/public", function(req,res)
 {
     res.json({message:"The public api is working and you don't need to be authenticated"});
