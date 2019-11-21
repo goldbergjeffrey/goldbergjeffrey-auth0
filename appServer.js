@@ -8,9 +8,9 @@ app.get('/*', function(req, res) {
   res.sendFile(path.join(__dirname + '/index.html'));
 });
 
-const hostname = '0.0.0.0';
+const hostname = 'goldbergjeffrey-pizza42.herokuapp.com';
 const port = 3000;
 
 const server = app.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);  
+  console.log(`Server running at https://${hostname}:${port}/`);  
 });
