@@ -42,15 +42,17 @@ app.get("/api/private", authCheck, function(req,res)
 });
 
 
-
+//GET the extended user profile from Auth0
 app.get("/api/getuser", function(req,res)
 {
 
     var user = req.header("UserId");
 
+    //Get an api from the management API
     return getAPIToken()
     .then(function(token)
     {
+        //Get userinfo from the management API
         return getUserInfo(token,encodeURI(user))
         .then(function(body)
         {
@@ -59,12 +61,16 @@ app.get("/api/getuser", function(req,res)
     })
 });
 
+//This method goes out to google people api twice. Once to get the profile picture and gender of the user,
+//and then goes out to the collection endpoint to get contact count.
+//Lastly it adds the information to the Auth0 profile for the google account, and then a rule in the admin layer merges the email and google profile if possible.
 app.get("/api/getpeopledata", function(req,res)
 {
     var result = {};
     var gToken = req.header('gAccess_token');
     var userId = req.header('UserId');
 
+    //obtaining the access token on the login with google credentials
     return getGooglePeopleData(gToken)
     .then(function(peopleData)
     {
@@ -104,7 +110,7 @@ app.get("/api/getpeopledata", function(req,res)
     })
 })
 
-
+//Updates the Auth0 credential to email verified so profiles can be merged.
 app.get("/api/verifyemail", function(req, res)
 {
     var result = {};
@@ -126,6 +132,9 @@ app.get("/api/verifyemail", function(req, res)
 
 app.listen(process.env.PORT);
 console.log("listening on https://localhost:" + process.env.PORT );
+
+
+//Supporting functions
 
 function getUserInfo(token, user)
 {
